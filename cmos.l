@@ -19,6 +19,9 @@
 #define T_RBRACE      16
 #define T_LBRACKET    17
 #define T_RBRACKET    18
+#define T_ASSIGNOP    19
+#define T_INCLUDE     20
+#define T_PREDIR     21
 
 void emit(int tok) 
 {
@@ -29,6 +32,8 @@ void emit(int tok)
 %option noyywrap
 %x COMMENT
 
+INCLUDE \#include[ \t]+(<[^>\n]+>|\"[^\"\n]+\")
+PREDIR \#[A-Za-z]+.*
 LETTER [A-Za-z_]
 DIGIT [0-9]
 ID {LETTER}({LETTER}|{DIGIT})*
@@ -54,18 +59,24 @@ WS [ \t\r\n]+
 
 "return"|"break"|"continue" { emit(T_JUMP); }
 
-"unsigned"|"signed"|"const"|"static"|"typedef"|"struct" { emit(T_MODIFIER); }
+"unsigned"|"signed"|"const"|"static"|"typedef"|"struct"|"enum"|"union"|"extern"|"volatile"|"register"|"goto"|"auto" { emit(T_MODIFIER); }
 
+
+{INCLUDE} { emit(T_INCLUDE); }
+{PREDIR} { emit(T_PREDIR); }
 {STRING} { emit(T_STRING); }
 {CHARLIT} { emit(T_CHAR); }
 {NUMBER} { emit(T_NUMBER); }
+"sizeof" { emit(T_OPERATOR); } /* would get matched to ID, have to do it here*/
 {ID} { emit(T_IDENTIFIER); }
+
+"++"|"--"|"+"|"-"|"*"|"/"|"%"|"&&"|"||"|"!"|"^"|"<<"|">>"|"?"|"->"|"|"|"&"|"~"|"." { emit(T_OPERATOR); }
 
 "=="|"!="|"<="|">=" { emit(T_REL_OP); }
 "<"|">" { emit(T_REL_OP); }
 "=" { emit(T_ASSIGN); }
 
-"++"|"--"|"+"|"-"|"*"|"/"|"%"|"&&"|"||"|"!" { emit(T_OPERATOR); }
+"-="|"/="|"*="|"+="|"%="|"&="|"|="|"^="|"<<="|">>=" { emit(T_ASSIGNOP); }
 
 ";"|","|":" { emit(T_PUNCT); }
 "(" { emit(T_LPAREN); }
@@ -78,6 +89,7 @@ WS [ \t\r\n]+
 . ;
 %%
 int main(void) {
+    freopen("scanner_out.txt", "w", stdout);
     yylex();
     return 0;
 }
