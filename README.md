@@ -1,6 +1,4 @@
-# pl_detector
-Plagiarism detector
-
+# Plagiarism Detector
 ## How to Compile and Run
 To compile:
 ```
@@ -18,5 +16,4 @@ make clean
 ```
 
 ### Authors
-Nathan Beasley
-William Potts
+Nathan Beasley and William Potts

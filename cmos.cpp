@@ -1,3 +1,10 @@
+/**
+ * Authors: Nathan Beasley and William Potts
+ * Date: 3/18/2026
+ * 
+ * Desc: Plagiarism Detector using FLEX
+ */
+
 #include <string>
 #include <vector>
 #include <cctype>

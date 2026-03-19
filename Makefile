@@ -2,7 +2,7 @@
 CXX = g++
 CXXFLAGS = -Wall
 
-# Default target
+# Default
 all: scanner cmos
 
 # Build scanner from lex file
