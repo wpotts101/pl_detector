@@ -1,3 +1,4 @@
+/* Authors: Nathan Beasley and William Potts */
 %{
 #include <stdio.h>
 
