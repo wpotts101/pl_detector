@@ -15,6 +15,12 @@ struct c_file_data {
     vector<size_t> fingerprints;
 };
 
+struct comparison{
+    int program1;
+    int program2;
+    float ratio;
+};
+
 
 //takes the string of tokens and deletes spaces
 string RMspace(const string& s){
@@ -124,16 +130,30 @@ int main(){
         c_programs.push_back(c);
     }
 
+    vector<comparison> comparisons;
+    comparison comp;
 
     //comparing the data:
     for (int i = 0; i < c_programs.size(); i++){
         for (int j = i + 1; j < c_programs.size(); j++){
-            cout << "comparing programs " << i+1 << " and " << j+1 << "\n";
-            cout << "ratio: " << fingerprintComparison(c_programs[i].fingerprints, c_programs[j].fingerprints) << "\n";
+            float r = fingerprintComparison(c_programs[i].fingerprints, c_programs[j].fingerprints);
+
+            comp.program1 = i+1;
+            comp.program2 = j+1;
+            comp.ratio = r;
+
+            comparisons.push_back(comp);
         }
     }
 
-    return 0;
+    sort(comparisons.begin(), comparisons.end(), [](const comparison& a, const comparison& b) {
+        return a.ratio > b.ratio;
+    });
 
+    for(const comparison& c : comparisons)
+    {
+        cout << "Comparing programs: " << c.program1 << " and " << c.program2 << endl;
+        cout << "ratio: " << c.ratio << endl;
+    }
 }
 
